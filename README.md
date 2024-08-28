@@ -70,19 +70,19 @@ The script is divided into two parts:
 
 The following are the specific steps that are performed in the script:
 
--   The `for` loop removes any existing Docker packages.
--   The `sudo apt-get update` command updates the apt package index.
--   The `sudo apt-get install zip unzip` command installs zip, and unzip.
--   The `sudo apt-get install ca-certificates curl gnupg` command installs ca-certificates, curl, and gnupg.
--   The `sudo install -m 0755 -d /etc/apt/keyrings` command creates a directory for Docker's GPG key.
--   The `curl -fsSL https://download.docker.com/linux/debian/gpg | sudo gpg --dearmor -o /etc/apt/keyrings/docker.gpg` command downloads Docker's GPG key.
--   The `sudo chmod a+r /etc/apt/keyrings/docker.gpg` command makes the Docker GPG key readable.
--   The `echo` command creates a file to add Docker's repository to apt.
--   The `sudo tee /etc/apt/sources.list.d/docker.list > /dev/null` command writes the file to the `/etc/apt/sources.list.d/docker.list` directory.
--   The `sudo apt-get update` command updates the apt package index again.
--   The `sudo apt-get -y install docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin` command installs Docker CE, Docker CE CLI, containerd.io, docker-buildx-plugin, and docker-compose-plugin.
--   The `sudo docker pull sapse/abap-platform-trial:1909` command pulls the Docker image.
--   The `sudo docker run` command starts the Docker container and maps the container's ports to the host's ports.
+-   The `for` loop removes any existing Docker packages.
+-   The `sudo apt-get update` command updates the apt package index.
+-   The `sudo apt-get install zip unzip` command installs zip, and unzip.
+-   The `sudo apt-get install ca-certificates curl gnupg` command installs ca-certificates, curl, and gnupg.
+-   The `sudo install -m 0755 -d /etc/apt/keyrings` command creates a directory for Docker's GPG key.
+-   The `curl -fsSL https://download.docker.com/linux/debian/gpg | sudo gpg --dearmor -o /etc/apt/keyrings/docker.gpg` command downloads Docker's GPG key.
+-   The `sudo chmod a+r /etc/apt/keyrings/docker.gpg` command makes the Docker GPG key readable.
+-   The `echo` command creates a file to add Docker's repository to apt.
+-   The `sudo tee /etc/apt/sources.list.d/docker.list > /dev/null` command writes the file to the `/etc/apt/sources.list.d/docker.list` directory.
+-   The `sudo apt-get update` command updates the apt package index again.
+-   The `sudo apt-get -y install docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin` command installs Docker CE, Docker CE CLI, containerd.io, docker-buildx-plugin, and docker-compose-plugin.
+-   The `sudo docker pull sapse/abap-platform-trial:1909` command pulls the Docker image.
+-   The `sudo docker run` command starts the Docker container and maps the container's ports to the host's ports.
 
 ## Import transport for ABAP SDK for Google Cloud
 **Script Name:**  [import_abap_sdk.sh](https://github.com/google-cloud-abap/community/blob/main/blogs/abap-trial-docker-1909/import_abap_sdk.sh)
