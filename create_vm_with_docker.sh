@@ -1,5 +1,14 @@
 #!/bin/bash
 
+# Get the subnet from the user or default to "default"
+SUBNET=${1:-default}
+
+# Get the CREATE_FIREWALL attribute or default to "Y" (yes)
+CREATE_FIREWALL=${2:-Y}
+
+# Get the CREATE_SA attribute or default to "Y" (yes)
+CREATE_SA=${3:-Y}
+
 #Get the project number
 PROJECT_NAME=$(gcloud config get project)
 #Check if project is set
@@ -20,29 +29,33 @@ if [[ -z "$ZONE" ]]; then
     exit 1.
 fi
 
-#Create a firewall rule
-gcloud compute firewall-rules create sapmachine \
---direction=INGRESS --priority=1000 --network=default --action=ALLOW \
---rules=tcp:3200,tcp:3300,tcp:8443,tcp:30213,tcp:50000,tcp:50001 \
---source-ranges=0.0.0.0/0 --target-tags=sapmachine
+# Create a firewall rule only if CREATE_FIREWALL is not "N"
+if [[ "$CREATE_FIREWALL" != "N" ]]; then
+    gcloud compute firewall-rules create sapmachine \
+    --direction=INGRESS --priority=1000 --network=$SUBNET --action=ALLOW \
+    --rules=tcp:3200,tcp:3300,tcp:8443,tcp:30213,tcp:50000,tcp:50001 \
+    --source-ranges=0.0.0.0/0 --target-tags=sapmachine
+fi
 
 #Enable Google Service to be accessed by ABAP SDK 
 gcloud services enable iamcredentials.googleapis.com
 gcloud services enable addressvalidation.googleapis.com
 
-#Create Service Account - will be used by ABAP SDK
-gcloud iam service-accounts create abap-sdk-dev \
-    --description="ABAP SDK Dev Account" \
-    --display-name="ABAP SDK Dev Account"
+# Create Service Account only if CREATE_SA is not "N"
+if [[ "$CREATE_SA" != "N" ]]; then
+    gcloud iam service-accounts create abap-sdk-dev \
+        --description="ABAP SDK Dev Account" \
+        --display-name="ABAP SDK Dev Account"
+fi
 
 #Create the VM for docker installation
-gcloud compute instances create abap-trial-docker \
+gcloud compute instances create abap-trial-docker-2022 \
     --project=$PROJECT_NAME \
     --zone=$ZONE \
     --machine-type=n2-highmem-4 \
-    --network-interface=network-tier=PREMIUM,stack-type=IPV4_ONLY,subnet=default \
+    --network-interface=network-tier=PREMIUM,stack-type=IPV4_ONLY,subnet=$SUBNET \
     --metadata=startup-script=curl\ \
-https://raw.githubusercontent.com/google-cloud-abap/abap-cloud-trial-2022-gcp/vm_startup_script.sh\ -o\ /tmp/vm_startup_script.sh$'\n'chmod\ 755\ /tmp/vm_startup_script.sh$'\n'nohup\ /tmp/vm_startup_script.sh\ \>\ /tmp/output.txt\ \& \
+https://raw.githubusercontent.com/google-cloud-abap/abap-cloud-trial-2022-gcp/main/vm_startup_script.sh\ -o\ /tmp/vm_startup_script.sh$'\n'chmod\ 755\ /tmp/vm_startup_script.sh$'\n'nohup\ /tmp/vm_startup_script.sh\ \>\ /tmp/output.txt\ \& \
     --maintenance-policy=MIGRATE \
     --provisioning-model=STANDARD \
     --service-account=$PROJECT_NUMBER-compute@developer.gserviceaccount.com \

@@ -1,60 +1,58 @@
 # Install ABAP Platform Trail 2022 docker on Google Cloud Platform
 
-The scripts listed in this repository is referred by article - Evaluating ABAP SDK for Google Cloud using ABAP Platform Trial 1909 on Google Cloud Platform. 
+The scripts listed in this repository is referred by article - Evaluating ABAP SDK for Google Cloud using ABAP Platform Trial 2022 on Google Cloud Platform. 
 Below is the Google Bard generated explanation of each of the scripts:  
 
-## Create Virtual Machine
-**Script name:** [create_vm_with_docker.sh](https://github.com/google-cloud-abap/community/blob/main/blogs/abap-trial-docker-1909/create_vm_with_docker.sh)
+```markdown
+# ABAP Cloud Trial VM Creation Script
+**Script name:** [create_vm_with_docker.sh](https://github.com/google-cloud-abap/abap-cloud-trial-2022-gcp/blob/main/create_vm_with_docker.sh)
 
-The script creates a Google Cloud Platform (GCP) virtual machine (VM) for installing Docker. The script first gets the project number and zone from the GCP configuration. It then creates a firewall rule to allow traffic on ports 3200, 3300, 8443, 30213, 50000, and 50001 to the VM. It then enables the Google Cloud IAM credentials and address validation services, which are required for ABAP SDK sample code. Next, it creates a service account that will be used by the ABAP SDK. Finally, it creates the VM with the specified configuration.
+This script automates the creation of a Google Cloud Platform (GCP) Virtual Machine (VM) configured for the ABAP Cloud Trial 2022. 
 
-Here is a more detailed explanation of each step:
+## Prerequisites
 
--  The script validates if project name a and default compute/zone has been set.
+* **GCP Project:** You must have an active GCP project.
+* **GCP SDK:**  The Google Cloud SDK installed and configured. 
+* **Project ID & Zone:** You must have your project ID and compute zone set. Use `gcloud config set project <your-project-id>` and `gcloud config set compute/zone <your-zone>` to configure. 
+
+## Usage
+
 ```bash
-#Get the project number
-PROJECT_NAME=$(gcloud config get project)
-#Check if project is set
-if [[ -z "$PROJECT_NAME" ]]; then
-    echo "Project Name is not set. Use gcloud config set project"
-    exit 1
-fi
-
-PROJECT_NUMBER=$(gcloud projects describe $PROJECT_NAME \
---format="value(projectNumber)")
-
-#Get the compute/zone
-ZONE=$(gcloud config get compute/zone)
-
-#Check if zone is set
-if [[ -z "$ZONE" ]]; then
-    echo "Compute zone is not set. Use gcloud config set compute/zone"
-    exit 1.
-fi
+./create_vm.sh [subnet] [create_firewall] [create_sa]
 ```
--  The script then create a firewall. This line creates a firewall rule to allow traffic on ports 3200, 3300, 8443, 30213, 50000, and 50001 to the VM. The `-e direction=INGRESS` flag specifies that the traffic is coming into the VM. The `-e priority=1000` flag specifies that this rule has a priority of 1000, which means it will be applied before any other firewall rules. The `-e network=default` flag specifies that the rule applies to the default network. The `-e action=ALLOW` flag specifies that the traffic is allowed. The `-e rules=tcp:3200,tcp:3300,tcp:8443,tcp:30213,tcp:50000,tcp:50001` flag specifies the ports that are allowed. The `-e source-ranges=0.0.0.0/0` flag specifies that the traffic can come from any source IP address. The `-e target-tags=sapmachine` flag specifies that the rule applies to the VM with the tag `sapmachine`.
-```bash
-gcloud compute firewall-rules create sapmachine \ --direction=INGRESS --priority=1000 --network=default --action=ALLOW \ --rules=tcp:3200,tcp:3300,tcp:8443,tcp:30213,tcp:50000,tcp:50001 \ --source-ranges=0.0.0.0/0 --target-tags=sapmachine
-```
--  This belo lines enables the Google Cloud IAM credentials service and Address Validation service.. This service is required for the ABAP SDK to code sample provided in the blog.
-```bash
-gcloud services enable iamcredentials.googleapis.com
-gcloud services enable addressvalidation.googleapis.com
-```
--  This line creates a service account named `abap-sdk-dev`. This service account will be used by the ABAP SDK.
-```bash
-gcloud iam service-accounts create abap-sdk-dev \
-  --description="ABAP SDK Dev Account" \
-  --display-name="ABAP SDK Dev Account"
-```
--  The below line create the vm `abap-trail-docker`, with startup script [vm_startup_script.sh](https://github.com/google-cloud-abap/community/blob/main/blogs/abap-trial-docker-1909/vm_startup_script.sh) to install docker and SAP 1909 trail.
-```bash
-gcloud compute instances create abap-trial-docker \
-  --project=abap-sdk-poc \
-  --zone=us-west4-b \
-  --machine-type=e2-highmem-2 \
-  --network-interface=network-tier=PREMIUM,stack-type=IPV4_ONLY,subnet=default \
-  --metadata=startup-script=curl\ \ https://raw.githubusercontent.com/google-cloud-abap/community/main/blogs/abap-trial-docker-1909/vm_startup_script.sh\ -o\ /tmp/vm_startup_script.sh'\n'chmod\ 755
+
+**Parameters:**
+
+* **subnet:** (Optional) The name of the subnet to use for the VM. Default: "default".
+* **create_firewall:** (Optional) Whether to create a firewall rule for the VM. Default: "Y" (yes). Set to "N" to skip firewall creation.
+* **create_sa:** (Optional) Whether to create a service account for the VM. Default: "Y" (yes). Set to "N" to skip service account creation.
+
+## Script Functionality
+
+1. **Get Project Information:** Retrieves the project ID and project number from GCP configuration.
+2. **Get Compute Zone:** Retrieves the compute zone from GCP configuration.
+3. **Create Firewall Rule:** (Optional) Creates a firewall rule to allow access to ports used by the ABAP Cloud Trial on the VM. 
+4. **Enable Google Services:** Enables the IAM Credentials and Address Validation APIs for the VM.
+5. **Create Service Account:** (Optional) Creates a service account for the VM.
+6. **Create VM:** Creates a VM instance named "abap-trial-docker-2022" with the following specifications:
+   * **Machine Type:** n2-highmem-4
+   * **Network:** Specified subnet (or default) with PREMIUM tier and IPV4_ONLY stack type.
+   * **Startup Script:** Runs a script to set up the VM for the ABAP Cloud Trial.
+   * **Maintenance Policy:** MIGRATE
+   * **Provisioning Model:** STANDARD
+   * **Service Account:** The project's compute service account.
+   * **Scopes:**  `https://www.googleapis.com/auth/cloud-platform`
+   * **Tags:** `sapmachine`
+   * **Disk:** A 200 GB Persistent Disk with the Debian 12 image.
+   * **Shielded VM:** Enabled with VTPM and integrity monitoring.
+   * **Labels:** `goog-ec-src=vm_add-gcloud`
+
+## Notes
+
+* The startup script (`vm_startup_script.sh`) is located in the `google-cloud-abap/abap-cloud-trial-2022-gcp/` repository on GitHub. You can find the script and its documentation there.
+* This script will create the VM in the specified zone.
+* The VM will be created with a specific set of resources and configurations optimized for the ABAP Cloud Trial. 
+* For more information on the ABAP Cloud Trial, refer to the official documentation and repository: [https://github.com/google-cloud-abap/abap-cloud-trial-2022-gcp](https://github.com/google-cloud-abap/abap-cloud-trial-2022-gcp)
 ```
 
 ## Virtual Machine Startup Script
