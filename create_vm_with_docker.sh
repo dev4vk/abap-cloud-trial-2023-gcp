@@ -40,6 +40,7 @@ fi
 #Enable Google Service to be accessed by ABAP SDK 
 gcloud services enable iamcredentials.googleapis.com
 gcloud services enable addressvalidation.googleapis.com
+gcloud services enable compute.googleapis.com 
 
 # Create Service Account only if CREATE_SA is not "N"
 if [[ "$CREATE_SA" != "N" ]]; then
