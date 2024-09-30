@@ -57,6 +57,7 @@ if [[ "$CREATE_FIREWALL" != "N" ]]; then
     --direction=INGRESS --priority=1000 --network=$SUBNET --action=ALLOW \
     --rules=tcp:3200,tcp:3300,tcp:8443,tcp:30213,tcp:50000,tcp:50001 \
     --source-ranges=0.0.0.0/0 --target-tags=sapmachine
+    echo "Firewall rule 'sapmachine' created"
 fi
 
 #Enable Google Service to be accessed by ABAP SDK 
@@ -76,6 +77,7 @@ if [[ "$CREATE_SA" != "N" ]]; then
         --role "roles/aiplatform.user" \
         --role "roles/storage.objectAdmin" \
         --role "roles/iam.serviceAccountTokenCreator"
+    echo "Service account created and IAM roles assigned"
 fi
 
 #Create the VM for docker installation
@@ -97,3 +99,5 @@ https://raw.githubusercontent.com/google-cloud-abap/abap-cloud-trial-2022-gcp/ma
     --shielded-integrity-monitoring \
     --labels=goog-ec-src=vm_add-gcloud \
     --reservation-affinity=any
+
+echo "Compute instance abap-trial-docker-2022 created"
