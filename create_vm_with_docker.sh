@@ -35,6 +35,8 @@ echo "----------------------------------------"
 
 read -p "Do you want to continue? (y/n) " confirm
 
+echo "Starting the process... please enter to see satus"
+
 if [[ "$confirm" != "y" ]]; then
   echo "Exiting..."
   exit 0
