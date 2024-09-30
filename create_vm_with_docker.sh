@@ -23,6 +23,8 @@ PROJECT_NUMBER=$(gcloud projects describe $PROJECT_NAME \
 #Get the compute/zone
 ZONE=$(gcloud config get compute/zone)
 
+echo "Performing basic checks..."
+
 #Check if zone is set
 if [[ -z "$ZONE" ]]; then
     echo "Compute zone is not set. Use gcloud config set compute/zone"
@@ -51,13 +53,15 @@ if service_account_exists "abap-sdk-dev@$PROJECT_NAME.iam.gserviceaccount.com"; 
   exit 0
 fi
 
+echo "Basic check completed... starting the process..."
+
 # Create a firewall rule only if CREATE_FIREWALL is not "N"
 if [[ "$CREATE_FIREWALL" != "N" ]]; then
     gcloud compute firewall-rules create sapmachine \
     --direction=INGRESS --priority=1000 --network=$SUBNET --action=ALLOW \
     --rules=tcp:3200,tcp:3300,tcp:8443,tcp:30213,tcp:50000,tcp:50001 \
     --source-ranges=0.0.0.0/0 --target-tags=sapmachine
-    echo "Firewall rule 'sapmachine' created"
+    echo "Firewall rule 'sapmachine' created..."
 fi
 
 #Enable Google Service to be accessed by ABAP SDK 
@@ -77,7 +81,7 @@ if [[ "$CREATE_SA" != "N" ]]; then
         --role "roles/aiplatform.user" \
         --role "roles/storage.objectAdmin" \
         --role "roles/iam.serviceAccountTokenCreator"
-    echo "Service account created and IAM roles assigned"
+    echo "Service account created and IAM roles assigned..."
 fi
 
 #Create the VM for docker installation
@@ -100,4 +104,4 @@ https://raw.githubusercontent.com/google-cloud-abap/abap-cloud-trial-2022-gcp/ma
     --labels=goog-ec-src=vm_add-gcloud \
     --reservation-affinity=any
 
-echo "Compute instance abap-trial-docker-2022 created"
+echo "Compute instance abap-trial-docker-2022 created... Please proceed with next steps"
