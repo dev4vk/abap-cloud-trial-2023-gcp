@@ -26,7 +26,29 @@ ZONE=$(gcloud config get compute/zone)
 #Check if zone is set
 if [[ -z "$ZONE" ]]; then
     echo "Compute zone is not set. Use gcloud config set compute/zone"
-    exit 1.
+    exit 1
+fi
+
+# Function to check if a firewall rule exists
+firewall_rule_exists() {
+  gcloud compute firewall-rules describe "$1" &> /dev/null
+}
+
+# Function to check if a service account exists
+service_account_exists() {
+  gcloud iam service-accounts describe "$1" &> /dev/null
+}
+
+# Check if the firewall rule already exists and exit if it does
+if firewall_rule_exists "sapmachine"; then
+  echo "Firewall rule 'sapmachine' already exists. Exiting."
+  exit 0
+fi
+
+# Check if the service account already exists and exit if it does
+if service_account_exists "abap-sdk-dev@$PROJECT_NAME.iam.gserviceaccount.com"; then
+  echo "Service account 'abap-sdk-dev@$PROJECT_NAME.iam.gserviceaccount.com' already exists. Exiting."
+  exit 0
 fi
 
 # Create a firewall rule only if CREATE_FIREWALL is not "N"
@@ -50,7 +72,7 @@ if [[ "$CREATE_SA" != "N" ]]; then
         --display-name="ABAP SDK Dev Account"
 
     gcloud projects add-iam-policy-binding abap-sdk-poc \
-        --member "serviceAccount:abap-sdk-dev@abap-sdk-poc.iam.gserviceaccount.com" \
+        --member "serviceAccount:abap-sdk-dev@$PROJECT_NAME.iam.gserviceaccount.com" \
         --role "roles/aiplatform.user" \
         --role "roles/storage.objectAdmin" \
         --role "roles/iam.serviceAccountTokenCreator"
