@@ -23,6 +23,23 @@ PROJECT_NUMBER=$(gcloud projects describe $PROJECT_NAME \
 #Get the compute/zone
 ZONE=$(gcloud config get compute/zone)
 
+# --- Summary and Confirmation ---
+echo "----------------------------------------"
+echo "Summary of activities to be performed:"
+echo "- Create firewall rule 'sapmachine'"
+echo "- Enable required Google Cloud services"
+echo "- Create service account 'abap-sdk-dev@$PROJECT_NAME.iam.gserviceaccount.com'"
+echo "- Assign necessary IAM roles to the service account"
+echo "- Create Compute Engine VM 'abap-trial-docker-2022'"
+echo "----------------------------------------"
+
+read -p "Do you want to continue? (y/n) " confirm
+
+if [[ "$confirm" != "y" ]]; then
+  echo "Exiting..."
+  exit 0
+fi
+
 echo "Performing basic checks..."
 
 #Check if zone is set
