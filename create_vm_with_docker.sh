@@ -40,13 +40,20 @@ fi
 #Enable Google Service to be accessed by ABAP SDK 
 gcloud services enable iamcredentials.googleapis.com
 gcloud services enable addressvalidation.googleapis.com
-gcloud services enable compute.googleapis.com 
+gcloud services enable compute.googleapis.com
+gcloud services enable aiplatform.googleapis.com
 
 # Create Service Account only if CREATE_SA is not "N"
 if [[ "$CREATE_SA" != "N" ]]; then
     gcloud iam service-accounts create abap-sdk-dev \
         --description="ABAP SDK Dev Account" \
         --display-name="ABAP SDK Dev Account"
+
+    gcloud projects add-iam-policy-binding abap-sdk-poc \
+        --member "serviceAccount:abap-sdk-dev@abap-sdk-poc.iam.gserviceaccount.com" \
+        --role "roles/aiplatform.user" \
+        --role "roles/storage.objectAdmin" \
+        --role "roles/iam.serviceAccountTokenCreator"
 fi
 
 #Create the VM for docker installation
