@@ -94,14 +94,14 @@ if [[ "$CREATE_SA" != "N" ]]; then
     gcloud iam service-accounts create abap-sdk-dev \
         --description="ABAP SDK Dev Account" \
         --display-name="ABAP SDK Dev Account"
-
-    gcloud projects add-iam-policy-binding abap-sdk-poc \
-        --member "serviceAccount:abap-sdk-dev@$PROJECT_NAME.iam.gserviceaccount.com" \
-        --role "roles/aiplatform.user" \
-        --role "roles/storage.objectAdmin" \
-        --role "roles/iam.serviceAccountTokenCreator"
-    echo "Service account created and IAM roles assigned..."
 fi
+
+gcloud projects add-iam-policy-binding abap-sdk-poc \
+    --member "serviceAccount:abap-sdk-dev@$PROJECT_NAME.iam.gserviceaccount.com" \
+    --role "roles/aiplatform.user" \
+    --role "roles/storage.objectAdmin" \
+    --role "roles/iam.serviceAccountTokenCreator"
+echo "Service account created and IAM roles assigned..."
 
 #Create the VM for docker installation
 gcloud compute instances create abap-trial-docker-2022 \
