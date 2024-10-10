@@ -96,7 +96,7 @@ if [[ "$CREATE_SA" != "N" ]]; then
         --display-name="ABAP SDK Dev Account"
 fi
 
-gcloud projects add-iam-policy-binding abap-sdk-poc \
+gcloud projects add-iam-policy-binding $PROJECT_NAME \
     --member "serviceAccount:abap-sdk-dev@$PROJECT_NAME.iam.gserviceaccount.com" \
     --role "roles/aiplatform.user" \
     --role "roles/storage.objectAdmin" \
