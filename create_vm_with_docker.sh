@@ -113,7 +113,7 @@ gcloud compute instances create abap-trial-docker-2022 \
 https://raw.githubusercontent.com/google-cloud-abap/abap-cloud-trial-2022-gcp/main/vm_startup_script.sh\ -o\ /tmp/vm_startup_script.sh$'\n'chmod\ 755\ /tmp/vm_startup_script.sh$'\n'nohup\ /tmp/vm_startup_script.sh\ \>\ /tmp/output.txt\ \& \
     --maintenance-policy=MIGRATE \
     --provisioning-model=STANDARD \
-    --service-account=$PROJECT_NUMBER-compute@developer.gserviceaccount.com \
+    --service-account=abap-sdk-dev@$PROJECT_NAME.iam.gserviceaccount.com \
     --scopes=https://www.googleapis.com/auth/cloud-platform \
     --tags=sapmachine \
     --create-disk=auto-delete=yes,boot=yes,device-name=abap-trial-docker,image=projects/debian-cloud/global/images/debian-12-bookworm-v20240815,mode=rw,size=200,type=projects/$PROJECT_NAME/zones/$ZONE/diskTypes/pd-balanced \
