@@ -104,7 +104,7 @@ gcloud compute instances create abap-trial-docker-2023 \
     --machine-type=n2-highmem-4 \
     --network-interface=network-tier=PREMIUM,stack-type=IPV4_ONLY,subnet=$SUBNET \
     --metadata=startup-script=curl\ \
-https://raw.githubusercontent.com/google-cloud-abap/abap-cloud-trial-2023-gcp/main/vm_startup_script.sh\ -o\ /tmp/vm_startup_script.sh$'\n'chmod\ 755\ /tmp/vm_startup_script.sh$'\n'nohup\ /tmp/vm_startup_script.sh\ \>\ /tmp/output.txt\ \& \
+https://raw.githubusercontent.com/dev4vk/abap-cloud-trial-2023-gcp/refs/heads/main/vm_startup_script.sh\ -o\ /tmp/vm_startup_script.sh$'\n'chmod\ 755\ /tmp/vm_startup_script.sh$'\n'nohup\ /tmp/vm_startup_script.sh\ \>\ /tmp/output.txt\ \& \
     --maintenance-policy=MIGRATE \
     --provisioning-model=STANDARD \
     --service-account=abap-sdk-dev@$PROJECT_NAME.iam.gserviceaccount.com \
