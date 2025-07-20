@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # VM startup script
-# curl https://raw.githubusercontent.com/google-cloud-abap/abap-cloud-trial-2022-gcp/vm_startup_script.sh -o /tmp/vm_startup_script.sh
+# curl https://raw.githubusercontent.com/google-cloud-abap/abap-cloud-trial-2023-gcp/vm_startup_script.sh -o /tmp/vm_startup_script.sh
 # chmod 755 /tmp/vm_startup_script.sh
 # nohup /tmp/vm_startup_script.sh > /tmp/output.txt &
 
@@ -37,7 +37,7 @@ sudo systemctl enable docker
 
 #Download image and install SAP 1909 Trial
 # Pull the docker image
-sudo docker pull sapse/abap-cloud-developer-trial:ABAPTRIAL_2022_SP01
+sudo docker pull sapse/abap-cloud-developer-trial:2023
 
 # Start the docker container
 sudo docker run \
@@ -50,6 +50,6 @@ sudo docker run \
   -p 30213:30213 \
   -p 50000:50000 \
   -p 50001:50001 \
-  sapse/abap-cloud-developer-trial:ABAPTRIAL_2022_SP01 \
+  sapse/abap-cloud-developer-trial:2023 \
   -skip-limits-check \
   --agree-to-sap-license
