@@ -30,7 +30,7 @@ echo "- Create firewall rule 'sapmachine'"
 echo "- Enable required Google Cloud services"
 echo "- Create service account 'abap-sdk-dev@$PROJECT_NAME.iam.gserviceaccount.com'"
 echo "- Assign necessary IAM roles to the service account"
-echo "- Create Compute Engine VM 'abap-trial-docker-2022'"
+echo "- Create Compute Engine VM 'abap-trial-docker-2023'"
 echo "----------------------------------------"
 
 read -p "Do you want to continue? (y/n) " confirm
@@ -98,13 +98,13 @@ if [[ "$CREATE_SA" != "N" ]]; then
 fi
 
 #Create the VM for docker installation
-gcloud compute instances create abap-trial-docker-2022 \
+gcloud compute instances create abap-trial-docker-2023 \
     --project=$PROJECT_NAME \
     --zone=$ZONE \
     --machine-type=n2-highmem-4 \
     --network-interface=network-tier=PREMIUM,stack-type=IPV4_ONLY,subnet=$SUBNET \
     --metadata=startup-script=curl\ \
-https://raw.githubusercontent.com/google-cloud-abap/abap-cloud-trial-2022-gcp/main/vm_startup_script.sh\ -o\ /tmp/vm_startup_script.sh$'\n'chmod\ 755\ /tmp/vm_startup_script.sh$'\n'nohup\ /tmp/vm_startup_script.sh\ \>\ /tmp/output.txt\ \& \
+https://raw.githubusercontent.com/google-cloud-abap/abap-cloud-trial-2023-gcp/main/vm_startup_script.sh\ -o\ /tmp/vm_startup_script.sh$'\n'chmod\ 755\ /tmp/vm_startup_script.sh$'\n'nohup\ /tmp/vm_startup_script.sh\ \>\ /tmp/output.txt\ \& \
     --maintenance-policy=MIGRATE \
     --provisioning-model=STANDARD \
     --service-account=abap-sdk-dev@$PROJECT_NAME.iam.gserviceaccount.com \
