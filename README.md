@@ -1,10 +1,10 @@
-# Install ABAP Platform Trail 2022 docker on Google Cloud Platform
+# Install ABAP Platform Trail 2023 docker on Google Cloud Platform
 
-The scripts listed in this repository is referred by article - Evaluating ABAP SDK for Google Cloud using ABAP Platform Trial 2022 on Google Cloud Platform. 
+The scripts listed in this repository is referred by article - Evaluating ABAP SDK for Google Cloud using ABAP Platform Trial 2023 on Google Cloud Platform. 
 Below is the Google Bard generated explanation of each of the scripts:  
 
 ## Create Virtual Machine
-**Script name:** [create_vm_with_docker.sh](https://github.com/google-cloud-abap/abap-cloud-trial-2022-gcp/blob/main/create_vm_with_docker.sh)
+**Script name:** [create_vm_with_docker.sh]([https://github.com/google-cloud-abap/abap-cloud-trial-2022-gcp/blob/main/create_vm_with_docker.sh](https://github.com/dev4vk/abap-cloud-trial-2023-gcp/blob/main/create_vm_with_docker.sh))
 
 The script creates a Google Cloud Platform (GCP) virtual machine (VM) for installing Docker. The script first gets the project number and zone from the GCP configuration. It then creates a firewall rule to allow traffic on ports 3200, 3300, 8443, 30213, 50000, and 50001 to the VM. It then enables the Google Cloud IAM credentials and address validation services, which are required for ABAP SDK sample code. Next, it creates a service account that will be used by the ABAP SDK. Finally, it creates the VM with the specified configuration.
 
@@ -47,27 +47,27 @@ gcloud iam service-accounts create abap-sdk-dev \
   --description="ABAP SDK Dev Account" \
   --display-name="ABAP SDK Dev Account"
 ```
--  The below line create the vm `abap-trial-docker-2022`, with startup script [vm_startup_script.sh](https://github.com/google-cloud-abap/abap-cloud-trial-2022-gcp/blob/main/vm_startup_script.sh) to install docker and SAP 2022 trail.
+-  The below line create the vm `abap-trial-docker-2023`, with startup script [vm_startup_script.sh](https://github.com/dev4vk/abap-cloud-trial-2023-gcp/blob/main/vm_startup_script.sh) to install docker and SAP 2023 trail.
 ```bash
-gcloud compute instances create abap-trial-docker-2022 \
+gcloud compute instances create abap-trial-docker-2023 \
   --project=abap-sdk-poc \
   --zone=us-west4-b \
   --machine-type=n2-highmem-4 \
   --network-interface=network-tier=PREMIUM,stack-type=IPV4_ONLY,subnet=default \
   --metadata=startup-script=curl\ \
-https://raw.githubusercontent.com/google-cloud-abap/abap-cloud-trial-2022-gcp/main/vm_startup_script.sh\ -o\ /tmp/vm_startup_script.sh$'\n'chmod\ 755\ /tmp/vm_startup_script.sh$'\n'nohup\ /tmp/vm_startup_script.sh\ \>\ /tmp/output.txt\ \& \
+https://raw.githubusercontent.com/google-cloud-abap/abap-cloud-trial-2023-gcp/main/vm_startup_script.sh\ -o\ /tmp/vm_startup_script.sh$'\n'chmod\ 755\ /tmp/vm_startup_script.sh$'\n'nohup\ /tmp/vm_startup_script.sh\ \>\ /tmp/output.txt\ \& \
 ```
 
 ## Virtual Machine Startup Script
-**Script Name:** [vm_startup_script.sh](https://github.com/google-cloud-abap/abap-cloud-trial-2022-gcp/blob/main/vm_startup_script.sh)
+**Script Name:** [vm_startup_script.sh](https://github.com/dev4vk/abap-cloud-trial-2023-gcp/blob/main/vm_startup_script.sh)
 
 The script is divided into two parts:
 
 1.  Install Docker Engine
     -   The first part of the script installs Docker Engine on the system. This is done by removing any existing Docker packages, updating the apt package index, installing ca-certificates, curl, and gnupg, creating a directory for Docker's GPG key, downloading Docker's GPG key, making the Docker GPG key readable, creating a file to add Docker's repository to apt, and updating the apt package index again.
     -   Once these steps are complete, Docker Engine will be installed on the system.
-2.  Download image and install SAP 2022 Trial
-    -   The second part of the script downloads the SAP 2022 Trial image and starts a Docker container from the image. This is done by pulling the Docker image, starting the Docker container, and mapping the container's ports to the host's ports.
+2.  Download image and install SAP 2023 Trial
+    -   The second part of the script downloads the SAP 2023 Trial image and starts a Docker container from the image. This is done by pulling the Docker image, starting the Docker container, and mapping the container's ports to the host's ports.
 
 The following are the specific steps that are performed in the script:
 
@@ -82,11 +82,11 @@ The following are the specific steps that are performed in the script:
 -   The `sudo tee /etc/apt/sources.list.d/docker.list > /dev/null` command writes the file to the `/etc/apt/sources.list.d/docker.list` directory.
 -   The `sudo apt-get update` command updates the apt package index again.
 -   The `sudo apt-get -y install docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin` command installs Docker CE, Docker CE CLI, containerd.io, docker-buildx-plugin, and docker-compose-plugin.
--   The `sudo docker pull sapse/abap-cloud-developer-trial:ABAPTRIAL_2022` command pulls the Docker image.
+-   The `sudo docker pull sapse/abap-cloud-developer-trial:ABAPTRIAL_2023` command pulls the Docker image.
 -   The `sudo docker run` command starts the Docker container and maps the container's ports to the host's ports.
 
 ## Import transport for ABAP SDK for Google Cloud
-**Script Name:**  [import_abap_sdk.sh](https://github.com/google-cloud-abap/abap-cloud-trial-2022-gcp/blob/main/import_abap_sdk.sh)
+**Script Name:**  [import_abap_sdk.sh](https://github.com/dev4vk/abap-cloud-trial-2023-gcp/blob/main/import_abap_sdk.sh)
 
 The code first creates a directory called `abap_sdk_transport` and changes to that directory. Then, it downloads the transport files from the Google Cloud Storage bucket.
 
