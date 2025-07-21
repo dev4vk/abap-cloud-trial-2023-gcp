@@ -4,7 +4,7 @@ The scripts listed in this repository is referred by article - Evaluating ABAP S
 Below is the Google Bard generated explanation of each of the scripts:  
 
 ## Create Virtual Machine
-**Script name:** [create_vm_with_docker.sh]([https://github.com/google-cloud-abap/abap-cloud-trial-2022-gcp/blob/main/create_vm_with_docker.sh](https://github.com/dev4vk/abap-cloud-trial-2023-gcp/blob/main/create_vm_with_docker.sh))
+**Script name:** [create_vm_with_docker.sh](https://github.com/dev4vk/abap-cloud-trial-2023-gcp/blob/main/create_vm_with_docker.sh)
 
 The script creates a Google Cloud Platform (GCP) virtual machine (VM) for installing Docker. The script first gets the project number and zone from the GCP configuration. It then creates a firewall rule to allow traffic on ports 3200, 3300, 8443, 30213, 50000, and 50001 to the VM. It then enables the Google Cloud IAM credentials and address validation services, which are required for ABAP SDK sample code. Next, it creates a service account that will be used by the ABAP SDK. Finally, it creates the VM with the specified configuration.
 
